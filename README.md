@@ -40,8 +40,6 @@ shot-noise model + circuit resources
 - Primary optimizer: COBYLA
 - Chemical-accuracy threshold used by the notebook: 1.6 mHa
 
-The geometry and methodological parameters are taken directly from the supplied research notebook. fileciteturn12file0L335-L443
-
 ## Repository structure
 
 ```text
@@ -75,7 +73,7 @@ The geometry and methodological parameters are taken directly from the supplied 
 
 ## Reproducibility
 
-The canonical environment is pinned to the versions recorded during the notebook run: Python 3.12.13, PySCF 2.14.0, Qiskit 2.5.2, Qiskit Nature 0.8.0, Qiskit Aer 0.17.2, NumPy 2.0.2, SciPy 1.16.3, pandas 2.2.2, and Matplotlib 3.10.0. fileciteturn12file0L264-L329
+The canonical environment is pinned to the versions recorded during the notebook run: Python 3.12.13, PySCF 2.14.0, Qiskit 2.5.2, Qiskit Nature 0.8.0, Qiskit Aer 0.17.2, NumPy 2.0.2, SciPy 1.16.3, pandas 2.2.2, and Matplotlib 3.10.0.
 
 Create the environment with:
 
@@ -94,15 +92,15 @@ The full execution protocol is documented in [`docs/REPRODUCIBILITY.md`](docs/RE
 
 ## Important methodological note
 
-The notebook describes its stack as “Qiskit 1.x”, but its recorded installation and validation output show Qiskit 2.5.2. The repository preserves the **recorded computational environment** rather than silently rewriting the source study. fileciteturn12file0L84-L115 fileciteturn12file0L278-L329
+The notebook describes its stack as “Qiskit 1.x”, but its recorded installation and validation output show Qiskit 2.5.2. The repository preserves the **recorded computational environment** rather than silently rewriting the source study.
 
-The finite-shot section in the source notebook should also be interpreted carefully: it performs an exact-estimator VQE and then applies a Gaussian post-processing perturbation with σ ∝ 1/√Nshots; it is therefore a **shot-noise statistical model**, not a full finite-shot optimization using sampled Pauli measurements. fileciteturn13file0L636-L665
+The finite-shot section in the source notebook should also be interpreted carefully: it performs an exact-estimator VQE and then applies a Gaussian post-processing perturbation with σ ∝ 1/√Nshots; it is therefore a **shot-noise statistical model**, not a full finite-shot optimization using sampled Pauli measurements.
 
 ## Reported benchmark observations
 
-At the equilibrium geometry used in the notebook (R(O–O) = 1.45 Å), the source workflow reports 4 qubits / 27 Pauli terms for Jordan–Wigner and 2 qubits / 9 Pauli terms for reduced parity, with both mappings reproducing the CAS reference to numerical precision. fileciteturn12file0L803-L921
+At the equilibrium geometry used in the notebook (R(O–O) = 1.45 Å), the source workflow reports 4 qubits / 27 Pauli terms for Jordan–Wigner and 2 qubits / 9 Pauli terms for reduced parity, with both mappings reproducing the CAS reference to numerical precision.
 
-The source notebook reports UCCSD reaching the CAS(2,2) reference at equilibrium for both the 4-qubit JW and 2-qubit parity implementations, while the 2-qubit EfficientSU2 result differs by 0.013 mHa in that run. fileciteturn13file0L41-L115
+The source notebook reports UCCSD reaching the CAS(2,2) reference at equilibrium for both the 4-qubit JW and 2-qubit parity implementations, while the 2-qubit EfficientSU2 result differs by 0.013 mHa in that run.
 
 ## Scope and limitations
 
