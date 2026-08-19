@@ -4,14 +4,15 @@ channels:
 dependencies:
   - python=3.12
   - pip
-  - numpy=2.0
-  - scipy=1.16
-  - pandas=2.2
-  - matplotlib=3.10
-  - jupyterlab=4.6
+  - numpy=2.0.2
+  - scipy=1.16.3
+  - pandas=2.2.2
+  - matplotlib=3.10.0
+  - jupyterlab=4.6.3
   - pip:
       - pyscf==2.14.0
       - qiskit==2.5.2
       - qiskit-nature==0.8.0
       - qiskit-algorithms==0.4.0
       - qiskit-aer==0.17.2
+      - pytest==8.4.1
