@@ -1,0 +1,33 @@
+study:
+  molecule: H2O2
+  process: homolytic O-O bond dissociation
+  charge: 0
+  spin: 0
+  basis: sto-3g
+  active_space:
+    electrons: 2
+    spatial_orbitals: 2
+  geometry:
+    o_h_angstrom: 0.965
+    o_o_h_angle_deg: 100.0
+    h_o_o_h_dihedral_deg: 111.5
+    o_o_grid_angstrom: [1.00, 1.20, 1.45, 1.80, 2.20, 2.60, 3.00]
+
+vqe:
+  reference_geometry_angstrom: 1.45
+  optimizer: COBYLA
+  uccsd_maxiter: 200
+  hea_maxiter: 300
+  chemical_accuracy_mha: 1.6
+  initial_point: zeros
+
+noise_model:
+  type: postprocessed_gaussian_shot_noise
+  variance_numerator_hartree2: 0.25
+  shots: [1024, 8192, 65536]
+  seed_start: 101
+
+resources:
+  mappings:
+    - Jordan-Wigner
+    - Parity-2-Qubit-Reduced
