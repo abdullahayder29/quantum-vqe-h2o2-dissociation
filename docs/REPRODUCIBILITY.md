@@ -1,40 +1,96 @@
-# Reproducibility protocol
+# Reproducibility Protocol
 
-## 1. Environment
+This document defines the canonical procedure for reproducing the H₂O₂ O–O dissociation study.
 
-Use `environment.yml` to create the pinned computational environment:
+## 1. Clone
+
+```bash
+git clone https://github.com/abdullahayder29/quantum-vqe-h2o2-dissociation.git
+cd quantum-vqe-h2o2-dissociation
+```
+
+## 2. Create the computational environment
+
+The repository provides `environment.yml` and `requirements.txt`.
+
+### Conda
 
 ```bash
 conda env create -f environment.yml
 conda activate h2o2-vqe
 ```
 
-The recorded notebook environment reports Python 3.12.13, PySCF 2.14.0, Qiskit 2.5.2, Qiskit Nature 0.8.0, Qiskit Aer 0.17.2, NumPy 2.0.2, SciPy 1.16.3, pandas 2.2.2, and Matplotlib 3.10.0.
+### pip
 
-## 2. Execution
+For a clean Python 3.12 environment:
 
-Open the research notebook under `notebooks/` and execute cells in order. The notebook is the primary executable record of the study.
+```bash
+python -m pip install -r requirements.txt
+```
 
-## 3. Geometry
+The original notebook execution records Python 3.12.13, PySCF 2.14.0, Qiskit 2.5.2, Qiskit Nature 0.8.0, Qiskit Aer 0.17.2, NumPy 2.0.2, SciPy 1.16.3, pandas 2.2.2, and Matplotlib 3.10.0. These recorded versions should be treated as the provenance of the supplied run.
 
-The O-O dissociation scan is generated from the fixed molecular parameters documented in `data/README.md`. Do not hand-edit generated geometries when reproducing a result.
+## 3. Validate the environment
 
-## 4. Classical reference
+```bash
+python -c "import qiskit, qiskit_nature, qiskit_aer, pyscf; print('Qiskit:', qiskit.__version__); print('Qiskit Nature:', qiskit_nature.__version__); print('Qiskit Aer:', qiskit_aer.__version__); print('PySCF:', pyscf.__version__)"
+```
 
-Run the classical electronic-structure calculations before evaluating VQE results. Reference energies provide the baseline against which variational energies are compared.
+## 4. Execute the research notebook
 
-## 5. Quantum calculation
+Open:
 
-Record the mapper, active space, ansatz, optimizer, convergence threshold, initial point, simulator/backend, and shot count. For noisy or shot-based experiments, record the random seed where supported.
+`notebooks/H2O2_VQE_Bond_Dissociation.ipynb`
 
-## 6. Outputs
+Execute it from a fresh kernel, in order.
 
-Store generated tables and figures under `results/`. A result should be traceable from the output file to the notebook cell and environment that generated it.
+The executable workflow covers:
 
-## 7. Version control
+1. environment validation;
+2. H₂O₂ geometry generation;
+3. classical electronic-structure reference calculations;
+4. active-space Hamiltonian construction;
+5. fermion-to-qubit mapping;
+6. parity/Z₂ symmetry reduction;
+7. VQE;
+8. potential-energy-surface benchmarking;
+9. finite-shot/noise analysis;
+10. quantum-resource estimation.
 
-Never overwrite a published result silently. Changes to computational settings should be represented by a Git commit and described in the commit message or a changelog.
+## 5. Computational parameters that must be recorded
 
-## Important source note
+For every reproducible run, record:
 
-The supplied notebook describes its stack as “Qiskit 1.x” but its recorded installation output and validation environment report Qiskit 2.5.2. This repository preserves the recorded environment rather than silently changing the source methodology. The terminology should be reconciled in a future manuscript/revision before publication.
+- Python and package versions;
+- operating system and CPU/backend;
+- basis set;
+- molecular geometry;
+- O–O distance grid;
+- active space and electron count;
+- mapper and symmetry-reduction settings;
+- ansatz;
+- optimizer;
+- initial parameters;
+- convergence threshold;
+- maximum iterations;
+- number of shots;
+- simulator or hardware backend;
+- random seed where applicable.
+
+## 6. Scientific provenance
+
+Keep classical reference calculations, ideal simulator calculations, and finite-shot/noisy calculations distinguishable. Their results should not be treated as interchangeable.
+
+Every reported result should be traceable to:
+
+`input parameters → source code/notebook cell → environment → output artifact → figure/table`
+
+## 7. Result artifacts
+
+Generated machine-readable tables belong in `results/`. Figures belong in `figures/`. Derived results should be produced programmatically rather than manually edited.
+
+Do not overwrite an existing reported result without documenting the change in Git history.
+
+## 8. Source-methodology note
+
+The supplied notebook describes its stack as “Qiskit 1.x”, while its recorded installation output and validation environment report Qiskit 2.5.2. This repository preserves the recorded environment rather than silently changing the source methodology. The terminology should be reconciled in a future manuscript/revision before publication.
