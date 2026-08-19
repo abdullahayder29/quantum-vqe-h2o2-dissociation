@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+title: "Quantum Simulation of H2O2 O-O Bond Dissociation with VQE"
+type: software
+message: "If you use this repository, please cite it."
+authors:
+  - family-names: Hayder
+    given-names: Abdullah
+repository-code: "https://github.com/abdullahayder29/quantum-vqe-h2o2-dissociation"
+license: MIT
+year: 2026
+keywords:
+  - quantum chemistry
+  - VQE
+  - Qiskit
+  - Qiskit Nature
+  - PySCF
+  - hydrogen peroxide
+  - bond dissociation
