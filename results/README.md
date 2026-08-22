@@ -13,10 +13,13 @@ results/
 │   ├── mapping_comparison.csv
 │   ├── equilibrium_vqe_benchmark.csv
 │   ├── uccsd_resource_estimates.csv
-│   └── vqe_pes_benchmark.csv
+│   ├── vqe_pes_benchmark.csv
+│   └── vqe_convergence.csv
 ├── figures/
 │   ├── h2o2_dissociation_pes.png
 │   ├── vqe_error_vs_bond_distance.png
+│   ├── active_space_error_vs_bond_distance.png
+│   ├── vqe_convergence.png
 │   └── mapping_and_resources.png
 └── study_summary.json
 ```
@@ -24,10 +27,11 @@ results/
 ## What the tables answer
 
 - **Classical references:** RHF, CAS(2,2), and full-space FCI energies across the O–O scan.
-- **Hamiltonian validation:** verifies that the qubit Hamiltonian reproduces the CAS(2,2) reference by exact diagonalization.
+- **Hamiltonian validation:** verifies that the mapped qubit Hamiltonian reproduces the CAS(2,2) reference by exact diagonalization.
 - **Mapping comparison:** compares Jordan–Wigner, Bravyi–Kitaev, standard parity, and 2-qubit reduced parity.
 - **Equilibrium VQE:** compares 4-qubit JW UCCSD, 2-qubit reduced-parity UCCSD, and a 2-qubit EfficientSU2 ansatz.
-- **PES benchmark:** evaluates UCCSD VQE at every O–O distance and reports the error relative to CAS(2,2).
+- **PES benchmark:** evaluates the canonical **2-qubit reduced-parity UCCSD VQE** at every O–O distance and reports its error relative to CAS(2,2).
+- **Convergence:** records COBYLA energy trajectories at 1.45 Å and 3.00 Å for the same 2-qubit reduced-parity UCCSD workflow used for the PES.
 - **Resource estimates:** records qubit count, Pauli-term count, gate count, CNOT count, and circuit depth.
 
 ## Reproducibility
@@ -35,6 +39,7 @@ results/
 From the repository root:
 
 ```bash
+python -m pytest -q
 python run_study.py
 ```
 
