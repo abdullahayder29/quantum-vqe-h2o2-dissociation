@@ -29,7 +29,7 @@ from src.analysis import (
 )
 from qiskit_algorithms.optimizers import COBYLA
 from qiskit_nature.second_q.circuit.library import HartreeFock, UCCSD
-from qiskit_nature.second_q.mappers import JordanWignerMapper
+from qiskit_nature.second_q.mappers import ParityMapper
 
 ROOT = Path(__file__).resolve().parent
 GEOMETRY_DIR = ROOT / "geometries"
@@ -38,17 +38,33 @@ TABLES = RESULTS / "tables"
 FIGURES = RESULTS / "figures"
 
 
+def _build_reduced_uccsd(problem):
+    """Build the canonical 2-qubit parity-reduced UCCSD circuit."""
+    mapper = ParityMapper(num_particles=problem.num_particles)
+    fermionic_op = problem.hamiltonian.second_q_op()
+    qubit_operator = mapper.map(fermionic_op)
+    hf = HartreeFock(
+        problem.num_spatial_orbitals,
+        problem.num_particles,
+        mapper,
+    )
+    ansatz = UCCSD(
+        problem.num_spatial_orbitals,
+        problem.num_particles,
+        mapper,
+        initial_state=hf,
+    )
+    return mapper, qubit_operator, ansatz
+
+
 def run_pes(catalog: dict, references: pd.DataFrame) -> pd.DataFrame:
-    ref_by_id = references.set_index("geom_id")["e_cas22_hartree"].to_dict()
+    """Run the dissociation PES using the canonical 2-qubit parity UCCSD VQE."""
+    ref_by_id = references.set_index("geom_id")
     rows = []
     for geom_id, data in catalog.items():
         problem = build_active_space_problem(data["pyscf_atom_string"])
-        fermionic_op = problem.hamiltonian.second_q_op()
+        _, qop, ansatz = _build_reduced_uccsd(problem)
         offset = sum(problem.hamiltonian.constants.values())
-        mapper = JordanWignerMapper()
-        qop = mapper.map(fermionic_op)
-        hf = HartreeFock(problem.num_spatial_orbitals, problem.num_particles, mapper)
-        ansatz = UCCSD(problem.num_spatial_orbitals, problem.num_particles, mapper, initial_state=hf)
         result, history = run_vqe_single_point(
             ansatz,
             qop,
@@ -56,14 +72,14 @@ def run_pes(catalog: dict, references: pd.DataFrame) -> pd.DataFrame:
             initial_point=[0.0] * ansatz.num_parameters,
         )
         energy = float(result.eigenvalue.real + offset)
-        reference = float(ref_by_id[geom_id])
+        reference = float(ref_by_id.loc[geom_id, "e_cas22_hartree"])
         rows.append({
             "geom_id": geom_id,
             "r_oo_angstrom": data["r_oo_angstrom"],
-            "e_rhf_hartree": float(references.loc[references.geom_id == geom_id, "e_rhf_hartree"].iloc[0]),
+            "e_rhf_hartree": float(ref_by_id.loc[geom_id, "e_rhf_hartree"]),
             "e_cas22_hartree": reference,
             "e_vqe_uccsd_hartree": energy,
-            "e_fci_full_hartree": float(references.loc[references.geom_id == geom_id, "e_fci_full_hartree"].iloc[0]),
+            "e_fci_full_hartree": float(ref_by_id.loc[geom_id, "e_fci_full_hartree"]),
             "vqe_error_mha": abs(energy - reference) * 1000.0,
             "vqe_iterations": len(history),
             "chemical_accuracy": abs(energy - reference) <= 0.0016,
@@ -74,7 +90,7 @@ def run_pes(catalog: dict, references: pd.DataFrame) -> pd.DataFrame:
 
 
 def run_convergence_study(catalog: dict, references: pd.DataFrame) -> pd.DataFrame:
-    """Record optimizer trajectories at equilibrium and a stretched geometry."""
+    """Record reduced 2-qubit UCCSD optimizer trajectories at two geometries."""
     ref_by_id = references.set_index("geom_id")["e_cas22_hartree"].to_dict()
     equilibrium_id = min(catalog, key=lambda k: abs(catalog[k]["r_oo_angstrom"] - 1.45))
     stretched_id = max(catalog, key=lambda k: catalog[k]["r_oo_angstrom"])
@@ -83,12 +99,8 @@ def run_convergence_study(catalog: dict, references: pd.DataFrame) -> pd.DataFra
     for geom_id in (equilibrium_id, stretched_id):
         data = catalog[geom_id]
         problem = build_active_space_problem(data["pyscf_atom_string"])
-        fermionic_op = problem.hamiltonian.second_q_op()
+        _, qop, ansatz = _build_reduced_uccsd(problem)
         offset = sum(problem.hamiltonian.constants.values())
-        mapper = JordanWignerMapper()
-        qop = mapper.map(fermionic_op)
-        hf = HartreeFock(problem.num_spatial_orbitals, problem.num_particles, mapper)
-        ansatz = UCCSD(problem.num_spatial_orbitals, problem.num_particles, mapper, initial_state=hf)
         result, history = run_vqe_single_point(
             ansatz,
             qop,
@@ -97,12 +109,13 @@ def run_convergence_study(catalog: dict, references: pd.DataFrame) -> pd.DataFra
         )
         reference = float(ref_by_id[geom_id])
         for evaluation, value in enumerate(history):
+            total_energy = float(value + offset)
             rows.append({
                 "geom_id": geom_id,
                 "r_oo_angstrom": data["r_oo_angstrom"],
                 "evaluation": evaluation,
-                "energy_hartree": float(value + offset),
-                "error_mha": abs(float(value + offset) - reference) * 1000.0,
+                "energy_hartree": total_energy,
+                "error_mha": abs(total_energy - reference) * 1000.0,
                 "final_vqe_energy_hartree": float(result.eigenvalue.real + offset),
             })
 
@@ -165,6 +178,9 @@ def main() -> None:
     summary = {
         "equilibrium_r_oo_angstrom": equilibrium["r_oo_angstrom"],
         "grid_angstrom": R_OO_GRID,
+        "pes_vqe_mapper": "ParityMapper(num_particles=2), 2-qubit reduced parity",
+        "pes_vqe_ansatz": "UCCSD",
+        "pes_optimizer": "COBYLA",
         "chemical_accuracy_threshold_mha": 1.6,
         "all_pes_points_chemical_accuracy": bool(pes["chemical_accuracy"].all()),
         "max_vqe_error_mha": float(pes["vqe_error_mha"].max()),
