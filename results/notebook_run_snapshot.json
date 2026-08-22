@@ -1,0 +1,54 @@
+{
+  "provenance": {
+    "source": "executed notebooks/H2O2_VQE_Bond_Dissociation.ipynb",
+    "note": "Values extracted from the executed notebook; this snapshot is archival and is not a replacement for rerunning run_study.py."
+  },
+  "classical_reference_energies": [
+    {"geom_id":"H2O2_R01_1.00A","r_oo_angstrom":1.0,"e_rhf_hartree":-148.34266322,"e_cas22_hartree":-148.34474043,"e_fci_full_hartree":-148.41828401,"active_space_error_mha":73.54358},
+    {"geom_id":"H2O2_R02_1.20A","r_oo_angstrom":1.2,"e_rhf_hartree":-148.69254880,"e_cas22_hartree":-148.69323963,"e_fci_full_hartree":-148.77603516,"active_space_error_mha":82.79553},
+    {"geom_id":"H2O2_R03_1.45A","r_oo_angstrom":1.45,"e_rhf_hartree":-148.75809640,"e_cas22_hartree":-148.75976360,"e_fci_full_hartree":-148.86670340,"active_space_error_mha":106.93980},
+    {"geom_id":"H2O2_R04_1.80A","r_oo_angstrom":1.8,"e_rhf_hartree":-148.65183269,"e_cas22_hartree":-148.74820533,"e_fci_full_hartree":-148.82496917,"active_space_error_mha":76.76384},
+    {"geom_id":"H2O2_R05_2.20A","r_oo_angstrom":2.2,"e_rhf_hartree":-148.51783019,"e_cas22_hartree":-148.72843983,"e_fci_full_hartree":-148.78611063,"active_space_error_mha":57.67080},
+    {"geom_id":"H2O2_R06_2.60A","r_oo_angstrom":2.6,"e_rhf_hartree":-148.43233723,"e_cas22_hartree":-148.72280577,"e_fci_full_hartree":-148.77540921,"active_space_error_mha":52.60344},
+    {"geom_id":"H2O2_R07_3.00A","r_oo_angstrom":3.0,"e_rhf_hartree":-148.38792818,"e_cas22_hartree":-148.72206780,"e_fci_full_hartree":-148.77351366,"active_space_error_mha":51.44586}
+  ],
+  "vqe_pes": [
+    {"geom_id":"H2O2_R01_1.00A","r_oo_angstrom":1.0,"e_vqe_uccsd_hartree":-148.34474043,"vqe_error_mha":0.0,"chemical_accuracy":true},
+    {"geom_id":"H2O2_R02_1.20A","r_oo_angstrom":1.2,"e_vqe_uccsd_hartree":-148.69323963,"vqe_error_mha":0.0,"chemical_accuracy":true},
+    {"geom_id":"H2O2_R03_1.45A","r_oo_angstrom":1.45,"e_vqe_uccsd_hartree":-148.75976360,"vqe_error_mha":0.0,"chemical_accuracy":true},
+    {"geom_id":"H2O2_R04_1.80A","r_oo_angstrom":1.8,"e_vqe_uccsd_hartree":-148.74820531,"vqe_error_mha":0.02,"chemical_accuracy":true},
+    {"geom_id":"H2O2_R05_2.20A","r_oo_angstrom":2.2,"e_vqe_uccsd_hartree":-148.72843979,"vqe_error_mha":0.04,"chemical_accuracy":true},
+    {"geom_id":"H2O2_R06_2.60A","r_oo_angstrom":2.6,"e_vqe_uccsd_hartree":-148.72279604,"vqe_error_mha":0.00973,"chemical_accuracy":true},
+    {"geom_id":"H2O2_R07_3.00A","r_oo_angstrom":3.0,"e_vqe_uccsd_hartree":-148.72206704,"vqe_error_mha":0.00076,"chemical_accuracy":true}
+  ],
+  "equilibrium_vqe": [
+    {"ansatz":"UCCSD (4-Qubit JW)","qubits":4,"parameters":3,"iterations":51,"energy_hartree":-148.75976360,"error_mha":0.0},
+    {"ansatz":"UCCSD (2-Qubit Parity Reduced)","qubits":2,"parameters":3,"iterations":48,"energy_hartree":-148.75976360,"error_mha":0.0},
+    {"ansatz":"EfficientSU2 (2-Qubit)","qubits":2,"parameters":8,"iterations":300,"energy_hartree":-148.75975060,"error_mha":0.0130}
+  ],
+  "mapping_comparison": [
+    {"mapping":"Jordan-Wigner","qubits":4,"pauli_terms":27,"avg_pauli_weight":2.37,"max_pauli_weight":4,"eigenvalue_error_hartree":1.99e-13},
+    {"mapping":"Bravyi-Kitaev","qubits":4,"pauli_terms":27,"avg_pauli_weight":2.41,"max_pauli_weight":4,"eigenvalue_error_hartree":1.99e-13},
+    {"mapping":"Parity (Standard)","qubits":4,"pauli_terms":27,"avg_pauli_weight":2.41,"max_pauli_weight":4,"eigenvalue_error_hartree":1.99e-13},
+    {"mapping":"Parity (2-Qubit Reduced)","qubits":2,"pauli_terms":9,"avg_pauli_weight":1.33,"max_pauli_weight":2,"eigenvalue_error_hartree":1.99e-13}
+  ],
+  "resource_comparison": [
+    {"representation":"Jordan-Wigner (4-Qubit)","qubits":4,"pauli_terms":27,"total_gates":150,"cx_gates":56,"circuit_depth":83},
+    {"representation":"Parity 2-Qubit Reduced","qubits":2,"pauli_terms":9,"total_gates":17,"cx_gates":4,"circuit_depth":12}
+  ],
+  "shot_noise_model": [
+    {"shots":"Infinity","optimizer":"COBYLA","energy_hartree":-148.75976360,"error_mha":0.0},
+    {"shots":1024,"optimizer":"COBYLA","energy_hartree":-148.71746907,"error_mha":42.2945},
+    {"shots":1024,"optimizer":"SPSA","energy_hartree":-148.72503903,"error_mha":34.7246},
+    {"shots":8192,"optimizer":"COBYLA","energy_hartree":-148.76666495,"error_mha":6.9014},
+    {"shots":8192,"optimizer":"SPSA","energy_hartree":-148.73419164,"error_mha":25.5720},
+    {"shots":65536,"optimizer":"COBYLA","energy_hartree":-148.76024275,"error_mha":0.4791},
+    {"shots":65536,"optimizer":"SPSA","energy_hartree":-148.73376380,"error_mha":25.9998}
+  ],
+  "notes": [
+    "The notebook output confirms that the canonical ideal PES used 2-qubit parity-reduced UCCSD with COBYLA.",
+    "The CAS(2,2)-FCI gap is much larger than the VQE-CAS error across the scan; this is an active-space/model limitation rather than a VQE optimization failure.",
+    "The shot-noise section is a Gaussian post-processing model applied to an exact statevector VQE result; it is not a true sampled-Pauli finite-shot VQE.",
+    "The notebook contains a stale printed shot-noise target energy (-148.56712984 Ha) that does not match the actual target variable (-148.75976360 Ha). The numerical error values are computed from the actual target variable. This should be corrected before publication."
+  ]
+}
