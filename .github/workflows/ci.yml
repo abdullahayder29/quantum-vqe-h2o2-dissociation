@@ -31,8 +31,11 @@ jobs:
           test -s results/tables/mapping_comparison.csv
           test -s results/tables/equilibrium_vqe_benchmark.csv
           test -s results/tables/vqe_pes_benchmark.csv
+          test -s results/tables/vqe_convergence.csv
           test -s results/tables/uccsd_resource_estimates.csv
           test -s results/study_summary.json
           test -s results/figures/h2o2_dissociation_pes.png
           test -s results/figures/vqe_error_vs_bond_distance.png
+          test -s results/figures/active_space_error_vs_bond_distance.png
+          test -s results/figures/vqe_convergence.png
           test -s results/figures/mapping_and_resources.png
