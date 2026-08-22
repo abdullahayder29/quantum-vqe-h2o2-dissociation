@@ -51,6 +51,9 @@ def test_summary_schema():
         return
     summary = json.loads(path.read_text())
     assert summary['chemical_accuracy_threshold_mha'] == 1.6
+    assert summary['pes_vqe_mapper'] == 'ParityMapper(num_particles=2), 2-qubit reduced parity'
+    assert summary['pes_vqe_ansatz'] == 'UCCSD'
+    assert summary['pes_optimizer'] == 'COBYLA'
     assert 'all_pes_points_chemical_accuracy' in summary
     assert 'max_active_space_error_mha' in summary
     assert 'files' in summary
