@@ -1,0 +1,38 @@
+name: H2O2 VQE CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: h2o2-vqe
+          environment-file: environment.yml
+          auto-activate-base: false
+          miniforge-version: latest
+      - name: Run unit tests
+        shell: bash -el {0}
+        run: pytest -q
+      - name: Run end-to-end study
+        shell: bash -el {0}
+        run: python run_study.py
+      - name: Validate generated artifacts
+        shell: bash -el {0}
+        run: |
+          test -s results/tables/classical_reference_energies.csv
+          test -s results/tables/hamiltonian_validation.csv
+          test -s results/tables/mapping_comparison.csv
+          test -s results/tables/equilibrium_vqe_benchmark.csv
+          test -s results/tables/vqe_pes_benchmark.csv
+          test -s results/tables/uccsd_resource_estimates.csv
+          test -s results/study_summary.json
+          test -s results/figures/h2o2_dissociation_pes.png
+          test -s results/figures/vqe_error_vs_bond_distance.png
+          test -s results/figures/mapping_and_resources.png
